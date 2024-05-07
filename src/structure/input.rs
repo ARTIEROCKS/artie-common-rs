@@ -1,4 +1,4 @@
-use crate::blocks::field::Field;
+use crate::structure::field::Field;
 #[derive(Debug, PartialEq)]
 pub struct Input {
     pub name: String,

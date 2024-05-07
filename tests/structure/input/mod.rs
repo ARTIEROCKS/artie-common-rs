@@ -1,5 +1,5 @@
-use artie_common::blocks::input::Input;
-use artie_common::blocks::field::Field;
+use artie_common::structure::input::Input;
+use artie_common::structure::field::Field;
 
 #[test]
 fn test_input_eq() {
