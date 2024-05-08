@@ -1,1 +1,1 @@
-pub mod blocks;
+pub mod structure;
