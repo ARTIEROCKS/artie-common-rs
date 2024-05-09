@@ -1,5 +1,5 @@
-use artie_common::structure::block::Block;
-use artie_common::structure::field::Field;
+use artie_common::structure::Block;
+use artie_common::structure::Field;
 
 #[test]
 pub fn test_add_field() {
