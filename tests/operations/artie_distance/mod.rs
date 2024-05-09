@@ -1,5 +1,5 @@
-use artie_common::structure::block::Block;
-use artie_common::structure::workspace::Workspace;
+use artie_common::structure::Block;
+use artie_common::structure::Workspace;
 use artie_common::operations::artie_distance::collect_families;
 use artie_common::operations::artie_distance::artie_distance;
 use std::collections::HashSet;
