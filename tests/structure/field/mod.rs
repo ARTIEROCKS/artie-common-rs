@@ -1,4 +1,4 @@
-use artie_common::structure::field::Field;
+use artie_common::structure::Field;
 
 #[test]
 fn test_is_numeric() {
