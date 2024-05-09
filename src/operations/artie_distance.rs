@@ -1,5 +1,5 @@
-use crate::structure::block::Block;
-use crate::structure::workspace::Workspace;
+use crate::structure::Block;
+use crate::structure::Workspace;
 use std::collections::HashSet;
 
 pub struct ArtieDistance {
