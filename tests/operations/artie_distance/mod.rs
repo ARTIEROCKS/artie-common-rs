@@ -42,14 +42,9 @@ pub fn test_collect_block_names(){
     block.nested.push(nested_block);
     block.next = Some(Box::new(next_block));
 
-    let mut families: HashSet<String> = HashSet::new();
-    families.insert("test_family".to_string());
-    families.insert("test_next_family".to_string());
-    families.insert("test_nested_family".to_string());
-
     let mut block_names = HashSet::new();
 
-    collect_block_names(&block, &families, &mut block_names);
+    collect_block_names(&block, &mut block_names);
 
     assert_eq!(block_names.len(), 4);
     
@@ -191,7 +186,7 @@ pub fn test_artie_distance_blocks(){
     let workspace = Workspace::new("workspace_id", "workspace_name", vec![workspace_block]);
 
     let distance = artie_distance(&workspace, &solution);
-    assert_eq!(distance.block_distance, 2.0);
+    assert_eq!(distance.block_distance, 3.0);
 
     //C- More elements in solution than in workspace
     let mut solution_block = Block::new("test_id", "test_name", "test_family", vec![]);

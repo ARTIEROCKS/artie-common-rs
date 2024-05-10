@@ -30,7 +30,6 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
     }
 
     // Calculate the family distance
-    let common_families: HashSet<_> = workspace_families.intersection(&solution_families).cloned().collect();
     let unique_families = workspace_families.symmetric_difference(&solution_families).count() as f64;
 
     // Set the distances for the ArtieDistance struct
@@ -44,10 +43,10 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
 
     // Recursively obtain the block names from the workspace and solution
     for block in &workspace.blocks {
-        collect_block_names(block, &common_families, &mut workspace_block_names);
+        collect_block_names(block, &mut workspace_block_names);
     }
     for block in &solution.blocks {
-        collect_block_names(block, &common_families, &mut solution_block_names);
+        collect_block_names(block, &mut solution_block_names);
     }
 
     // Calculate the block distance
@@ -74,14 +73,12 @@ pub fn collect_families(block: &Block, families: &mut HashSet<String>) {
 }
 
 // Helper function ro recursively collect block names from blocks that exists in the common families hashset
-pub fn collect_block_names(block: &Block, families: &HashSet<String>, block_names: &mut HashSet<String>) {
-    if families.contains(&block.family) {
-        block_names.insert(block.name.clone());
-    }
+pub fn collect_block_names(block: &Block, block_names: &mut HashSet<String>) {
+    block_names.insert(block.name.clone());
     for nested_block in &block.nested {
-        collect_block_names(nested_block, families, block_names);
+        collect_block_names(nested_block, block_names);
     }
     if let Some(next_block) = &block.next {
-        collect_block_names(&next_block, families, block_names);
+        collect_block_names(&next_block, block_names);
     }
 }
