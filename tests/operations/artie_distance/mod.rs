@@ -3,6 +3,7 @@ use artie_common::structure::Workspace;
 use artie_common::operations::artie_distance::collect_families;
 use artie_common::operations::artie_distance::collect_block_names;
 use artie_common::operations::artie_distance::artie_distance;
+use artie_common::operations::artie_distance::collect_block_positions;
 use std::collections::HashSet;
 use std::vec;
 
@@ -224,3 +225,28 @@ pub fn test_artie_distance_blocks(){
 
 }
 
+#[test]
+fn test_collect_block_positions(){
+    let mut block = Block::new("test_id", "test_name", "test_family", vec![]);
+    let mut next_block = Block::new("test_next_id", "test_next_name", "test_next_family", vec![]);
+    let nested_block = Block::new("test_nested_id", "test_nested_name", "test_nested_family", vec![]);
+    let nested_next_block = Block::new("test_nested_next_id", "test_nested_next_name", "test_family", vec![]);
+    
+    next_block.nested.push(nested_next_block);
+    block.nested.push(nested_block);
+    block.next = Some(Box::new(next_block));
+
+    let mut block_positions = Vec::new();
+    let mut position = 0;
+    collect_block_positions(&block, &mut position, &mut block_positions);
+
+    assert_eq!(block_positions.len(), 4);
+    assert_eq!(block_positions[0].0, "test_name");
+    assert_eq!(block_positions[0].1, 0);
+    assert_eq!(block_positions[1].0, "test_nested_name");
+    assert_eq!(block_positions[1].1, 2);
+    assert_eq!(block_positions[2].0, "test_next_name");
+    assert_eq!(block_positions[2].1, 3);
+    assert_eq!(block_positions[3].0, "test_nested_next_name");
+    assert_eq!(block_positions[3].1, 5);
+}

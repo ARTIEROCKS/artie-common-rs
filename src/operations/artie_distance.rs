@@ -57,6 +57,23 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
     artie_distance.block_distance += unique_blocks;
 
 
+    // 3- Position distance calculation
+    // 3.1- Collect the block positions for the workspace and solution
+
+    let mut workspace_block_positions = Vec::new();
+    let mut solution_block_positions = Vec::new();
+
+    let mut position = 0;
+    for block in &workspace.blocks {
+        collect_block_positions(block, &mut position, &mut workspace_block_positions);
+    }
+
+    position = 0;
+    for block in &solution.blocks {
+        collect_block_positions(block, &mut position, &mut solution_block_positions);
+    }
+
+
     artie_distance
 
 }
@@ -80,5 +97,27 @@ pub fn collect_block_names(block: &Block, block_names: &mut HashSet<String>) {
     }
     if let Some(next_block) = &block.next {
         collect_block_names(&next_block, block_names);
+    }
+}
+
+// Helper to calculate the position for each block
+pub fn collect_block_positions(block: &Block, position: &mut usize, block_positions: &mut Vec<(String, usize)>){
+
+    // Insert the block name and its position in the block_positions vector
+    block_positions.push((block.name.clone(), *position));
+    
+    // Adds 1 to the position for the next block
+    *position += 1;
+
+    // Recursively call the function for the nested block
+    for nested_block in &block.nested {
+        // Adds 1 extra value to the nested position
+        *position += 1;
+        collect_block_positions(nested_block, position, block_positions);
+    }
+
+    // Recursively call the function for the next block
+    if let Some(next_block) = &block.next {
+        collect_block_positions(&next_block, position, block_positions);
     }
 }
