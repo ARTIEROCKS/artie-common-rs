@@ -2,8 +2,8 @@ use artie_common::structure::Block;
 use artie_common::structure::Workspace;
 use artie_common::operations::artie_distance::collect_families;
 use artie_common::operations::artie_distance::collect_block_names;
-use artie_common::operations::artie_distance::artie_distance;
 use artie_common::operations::artie_distance::collect_block_positions;
+use artie_common::operations::artie_distance::artie_distance;
 use std::collections::HashSet;
 use std::vec;
 
@@ -225,6 +225,7 @@ pub fn test_artie_distance_blocks(){
 
 }
 
+
 #[test]
 fn test_collect_block_positions(){
     let mut block = Block::new("test_id", "test_name", "test_family", vec![]);
@@ -249,4 +250,36 @@ fn test_collect_block_positions(){
     assert_eq!(block_positions[2].1, 3);
     assert_eq!(block_positions[3].0, "test_nested_next_name");
     assert_eq!(block_positions[3].1, 5);
+}
+
+#[test]
+pub fn test_artie_distance_positions(){
+    
+    // Creating the workspace
+    let mut workspace_block = Block::new("test_id", "test_name", "test_family", vec![]);
+    let mut workspace_next_block = Block::new("test_next_id", "test_next_name", "test_next_family", vec![]);
+    let workspace_nested_block = Block::new("test_nested_id", "test_nested_name", "test_nested_family", vec![]);
+    let workspace_nested_next_block = Block::new("test_nested_next_id", "test_nested_next_name", "test_family", vec![]);
+
+    workspace_next_block.nested.push(workspace_nested_next_block);
+    workspace_block.nested.push(workspace_nested_block);
+    workspace_block.next = Some(Box::new(workspace_next_block));
+
+    let workspace = Workspace::new("workspace_id", "workspace_name", vec![workspace_block]);
+
+    // Creating the solution
+    let mut solution_block = Block::new("test_id", "test_name", "test_family", vec![]);
+    let mut solution_next_block = Block::new("test_next_id", "test_next_name", "test_next_family", vec![]);
+    let solution_nested_block = Block::new("test_nested_id", "test_nested_name", "test_nested_family", vec![]);
+    let solution_nested_next_block = Block::new("test_nested_next_id", "test_nested_next_name", "test_family", vec![]);
+
+    solution_next_block.nested.push(solution_nested_next_block);
+    solution_block.nested.push(solution_nested_block);
+    solution_block.next = Some(Box::new(solution_next_block));
+
+    let solution = Workspace::new("solution_id", "solution_name", vec![solution_block]);
+
+    //A - Same workspace and solution
+    let distance = artie_distance(&workspace, &solution);
+    assert_eq!(distance.position_distance, 0.0);
 }

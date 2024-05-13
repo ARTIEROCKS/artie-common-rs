@@ -5,6 +5,7 @@ use std::collections::HashSet;
 pub struct ArtieDistance {
     pub family_distance: f64,
     pub block_distance: f64,
+    pub position_distance: f64,
 }
 
 /*
@@ -15,6 +16,7 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
     let mut artie_distance = ArtieDistance {
         family_distance: 0.0,
         block_distance: 0.0,
+        position_distance: 0.0,
     };
 
     //1- Family distance calculation
@@ -50,16 +52,15 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
     }
 
     // Calculate the block distance
-    let _common_blocks: HashSet<_> = workspace_block_names.intersection(&solution_block_names).cloned().collect();
-    let unique_blocks = workspace_block_names.symmetric_difference(&solution_block_names).count() as f64;
+    let common_blocks: HashSet<_> = workspace_block_names.intersection(&solution_block_names).cloned().collect();
+    let unique_blocks: HashSet<_> = workspace_block_names.symmetric_difference(&solution_block_names).cloned().collect();
 
     // Set the distances for the ArtieDistance struct
-    artie_distance.block_distance += unique_blocks;
+    artie_distance.block_distance += unique_blocks.len() as f64;
 
 
     // 3- Position distance calculation
     // 3.1- Collect the block positions for the workspace and solution
-
     let mut workspace_block_positions = Vec::new();
     let mut solution_block_positions = Vec::new();
 
@@ -71,6 +72,26 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
     position = 0;
     for block in &solution.blocks {
         collect_block_positions(block, &mut position, &mut solution_block_positions);
+    }
+
+    // 3.2- Calculate the position distance for unique_blocks
+    for block in &workspace_block_positions {
+        if unique_blocks.contains(&block.0) {
+            artie_distance.position_distance += (block.1 as i32).abs() as f64;
+        }
+    }
+    for block in &solution_block_positions {
+        if unique_blocks.contains(&block.0) {
+            artie_distance.position_distance += (block.1 as i32).abs() as f64;
+        }
+    }
+
+    // 3.3- Calculate the position distance for common_blocks (blocks that are in the workspace and solution)
+    for block in workspace_block_positions {
+        if common_blocks.contains(&block.0) {
+            let solution_position = solution_block_positions.iter().find(|&x| x.0 == block.0).unwrap();
+            artie_distance.position_distance += (block.1 as i32 - solution_position.1 as i32).abs() as f64;
+        }
     }
 
 
