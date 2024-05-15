@@ -64,7 +64,7 @@ pub fn test_artie_distance_positions_same(){
 }
 
 #[test]
-pub fn test_artie_distance_positions_more_in_worspace(){
+pub fn test_artie_distance_positions_more_in_workspace(){
 
     // Creating the solution
     let mut solution_block_a = Block::new("A", "A", "test_family", vec![]);
@@ -100,4 +100,41 @@ pub fn test_artie_distance_positions_more_in_worspace(){
      let distance = artie_distance(&Workspace::new("workspace_id", "workspace_name", vec![workspace_block_a]), &Workspace::new("solution_id", "solution_name", vec![solution_block_a]));
      assert_eq!(distance.position_distance, 7.0);
 
+}
+
+#[test]
+pub fn test_artie_distance_positions_more_in_solution(){
+    // Creating the solution
+    let mut solution_block_a = Block::new("A", "A", "test_family", vec![]);
+    let mut solution_block_b = Block::new("B", "B", "test_family", vec![]);
+    let solution_block_c = Block::new("C", "C", "test_family", vec![]);
+    let solution_block_d = Block::new("D", "D", "test_family", vec![]);
+    let solution_block_e = Block::new("E", "E", "test_family", vec![]);
+
+    // C is nested in B
+    solution_block_b.nested.push(solution_block_c);
+    // D is next to B
+    solution_block_b.next = Some(Box::new(solution_block_d));
+    // B is nested in A
+    solution_block_a.nested.push(solution_block_b);
+    // E is next to A
+    solution_block_a.next = Some(Box::new(solution_block_e));
+
+
+    // Creating the workspace
+    let mut workspace_block_a = Block::new("A", "A", "test_family", vec![]);
+    let mut workspace_block_b = Block::new("B", "B", "test_family", vec![]);
+    let mut workspace_block_c = Block::new("C", "C", "test_family", vec![]);
+    let workspace_block_d = Block::new("D", "D", "test_family", vec![]);
+ 
+    // D is nested in C
+    workspace_block_c.nested.push(workspace_block_d);
+    // C is next to B
+    workspace_block_b.next = Some(Box::new(workspace_block_c));
+    // B is nested in A
+    workspace_block_a.nested.push(workspace_block_b);
+ 
+    // Asserting that the distance is 8
+    let distance = artie_distance(&Workspace::new("workspace_id", "workspace_name", vec![workspace_block_a]), &Workspace::new("solution_id", "solution_name", vec![solution_block_a]));
+    assert_eq!(distance.position_distance, 8.0);
 }
