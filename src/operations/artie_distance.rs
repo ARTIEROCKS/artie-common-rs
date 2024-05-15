@@ -64,12 +64,12 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
     let mut workspace_block_positions = Vec::new();
     let mut solution_block_positions = Vec::new();
 
-    let mut position = 0;
+    let mut position = 1;
     for block in &workspace.blocks {
         collect_block_positions(block, &mut position, &mut workspace_block_positions);
     }
 
-    position = 0;
+    position = 1;
     for block in &solution.blocks {
         collect_block_positions(block, &mut position, &mut solution_block_positions);
     }
