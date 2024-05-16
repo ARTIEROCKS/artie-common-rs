@@ -6,6 +6,7 @@ pub struct ArtieDistance {
     pub family_distance: f64,
     pub block_distance: f64,
     pub position_distance: f64,
+    pub input_distance: f64,
 }
 
 /*
@@ -17,6 +18,7 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
         family_distance: 0.0,
         block_distance: 0.0,
         position_distance: 0.0,
+        input_distance: 0.0,
     };
 
     //1- Family distance calculation
@@ -94,6 +96,12 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
         }
     }
 
+    // 4- Input distance calculation
+    for workspace_block in &workspace.blocks {
+        for solution_block in &solution.blocks {
+            calculate_input_distance(workspace_block, solution_block, &mut artie_distance);
+        }
+    }
 
     artie_distance
 
@@ -140,5 +148,34 @@ pub fn collect_block_positions(block: &Block, position: &mut usize, block_positi
     // Recursively call the function for the next block
     if let Some(next_block) = &block.next {
         collect_block_positions(&next_block, position, block_positions);
+    }
+}
+
+// Helper function to calculate the input distance
+pub fn calculate_input_distance(workspace_block: &Block, solution_block: &Block, artie_distance: &mut ArtieDistance) {
+   
+   // Calculating the input distance
+   if workspace_block.name == solution_block.name {
+        for (workspace_field, solution_field) in workspace_block.fields.iter().zip(solution_block.fields.iter()) {
+            if workspace_field.name == solution_field.name {
+                if workspace_field.value != solution_field.value && workspace_field.is_numeric(){
+                    artie_distance.input_distance += (workspace_field.value_as_double() - solution_field.value_as_double()).abs();
+                }else if workspace_field.value != solution_field.value {
+                    artie_distance.input_distance += 1.0;
+                }
+            }
+        }
+    }
+
+    // Doing the calculations for nested blocks
+    for (workspace_nested_block, solution_nested_block) in workspace_block.nested.iter().zip(solution_block.nested.iter()) {
+        calculate_input_distance(workspace_nested_block, solution_nested_block, artie_distance);
+    }
+
+    // Doing the calculations for the next block
+    if let Some(workspace_next_block) = &workspace_block.next {
+        if let Some(solution_next_block) = &solution_block.next {
+            calculate_input_distance(workspace_next_block, solution_next_block, artie_distance);
+        }
     }
 }
