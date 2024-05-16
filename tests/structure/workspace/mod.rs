@@ -1,5 +1,5 @@
-use artie_common::structure::workspace::Workspace;
-use artie_common::structure::block::Block;
+use artie_common::structure::Workspace;
+use artie_common::structure::Block;
 
 #[test]
 pub fn test_add_block() {

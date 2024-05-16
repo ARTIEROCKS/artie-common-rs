@@ -1,0 +1,56 @@
+name: Rust Project CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+    
+    - name: Build
+      run: cargo build --verbose
+
+    - name: Run tests
+      run: cargo test --verbose
+
+  release:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup cargo-release
+      uses: actions-rs/cargo@v1
+      with:
+        command: install
+        args: cargo-release
+
+    - name: Read Version from Cargo.toml
+      id: cargo
+      run: echo "::set-output name=version::$(cargo pkgid | grep -oE '[^:]+[^#]+$')"
+    
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.cargo.outputs.version }}
+        release_name: Release ${{ steps.cargo.outputs.version }}
+        draft: false
+        prerelease: false
