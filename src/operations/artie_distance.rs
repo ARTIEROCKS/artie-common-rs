@@ -2,11 +2,18 @@ use crate::structure::Block;
 use crate::structure::Workspace;
 use std::collections::HashSet;
 
+// Coefficients for weighting each distance type
+const FAMILY_DISTANCE_COEFFICIENT: f64 = 1.0;
+const BLOCK_DISTANCE_COEFFICIENT: f64 = 2.0;
+const POSITION_DISTANCE_COEFFICIENT: f64 = 4.0;
+const INPUT_DISTANCE_COEFFICIENT: f64 = 8.0;
+
 pub struct ArtieDistance {
     pub family_distance: f64,
     pub block_distance: f64,
     pub position_distance: f64,
     pub input_distance: f64,
+    pub total_distance: f64,
 }
 impl ArtieDistance {
     pub fn new() -> ArtieDistance {
@@ -15,6 +22,7 @@ impl ArtieDistance {
             block_distance: 0.0,
             position_distance: 0.0,
             input_distance: 0.0,
+            total_distance: 0.0,
         }
     }
 }
@@ -108,6 +116,9 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
         }
     }
 
+    // 5- Total distance calculation
+    calculate_total_distance(&mut artie_distance);
+
     artie_distance
 
 }
@@ -183,4 +194,12 @@ pub fn calculate_input_distance(workspace_block: &Block, solution_block: &Block,
             calculate_input_distance(workspace_next_block, solution_next_block, artie_distance);
         }
     }
+}
+
+pub fn calculate_total_distance(artie_distance: &mut ArtieDistance) {
+    artie_distance.total_distance = 
+          (artie_distance.family_distance / FAMILY_DISTANCE_COEFFICIENT)
+        + (artie_distance.block_distance / BLOCK_DISTANCE_COEFFICIENT)
+        + (artie_distance.position_distance / POSITION_DISTANCE_COEFFICIENT)
+        + (artie_distance.input_distance / INPUT_DISTANCE_COEFFICIENT);
 }
