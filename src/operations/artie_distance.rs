@@ -8,18 +8,23 @@ pub struct ArtieDistance {
     pub position_distance: f64,
     pub input_distance: f64,
 }
+impl ArtieDistance {
+    pub fn new() -> ArtieDistance {
+        ArtieDistance {
+            family_distance: 0.0,
+            block_distance: 0.0,
+            position_distance: 0.0,
+            input_distance: 0.0,
+        }
+    }
+}
 
 /*
     * Artie Distance
     * The Artie distance is a measure of the difference between the workspace and the solution.
  */
 pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDistance {
-    let mut artie_distance = ArtieDistance {
-        family_distance: 0.0,
-        block_distance: 0.0,
-        position_distance: 0.0,
-        input_distance: 0.0,
-    };
+    let mut artie_distance = ArtieDistance::new();
 
     //1- Family distance calculation
     let mut workspace_families = HashSet::new();
