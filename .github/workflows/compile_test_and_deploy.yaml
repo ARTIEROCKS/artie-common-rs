@@ -42,11 +42,11 @@ jobs:
         args: cargo-release
         
     - name: Install toml-cli
-      run: sudo apt-get install -y toml-cli
+      run: cargo install toml-cli
       
     - name: Read Version from Cargo.toml
       run: |
-        VERSION=$(toml get Cargo.toml package.version)
+        VERSION=$(grep '^version' Cargo.toml | awk '{print $3}' | tr -d '"')
         echo "version=$VERSION" >> $GITHUB_ENV
     
     - name: Create Release
