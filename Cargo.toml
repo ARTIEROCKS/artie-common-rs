@@ -1,0 +1,22 @@
+[package]
+name = "artie_common"
+description = "Common Library for Artie Rust Projects"
+authors = ["Luis Eduardo Imbernón <imbernon@gmail.com>"]
+version = "0.0.1"
+edition = "2021"
+rust-version = "1.60"
+readme = "README.md"
+license = "Apache-2.0"
+repository = "https://github.com/ARTIEROCKS/artie-common-rs.git"
+homepage = "https://github.com/ARTIEROCKS/artie-common-rs.git"
+documentation = "https://docs.rs/artie-common-rs/latest/artie-common-rs"
+keywords = ["education", "block programming", "ai", "artificial", "intelligence"]
+categories = ["data-structures","encoding", "simulation"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8.5"
+num_cpus = "1.15.0"
+log = { version = "0.4", features = ["std", "serde", "kv_unstable"] }
+env_logger = "0.11.3"
