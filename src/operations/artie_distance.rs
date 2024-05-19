@@ -141,18 +141,21 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
             // Checks if the block exists in the solution positions remaining, and gets the index and the element
             if let Some((index, solution_block)) = solution_positions_remaining.iter().enumerate().find(|(_, block)| block.0 == workspace_block.0) {
                 // Calculate the position distance
-                artie_distance.position_distance += (workspace_block.1 as i32 - solution_block.1 as i32).abs() as f64;
+                let distance = (workspace_block.1 as i32 - solution_block.1 as i32).abs() as f64;
+                artie_distance.position_distance += distance;
 
-                // Adds the workspace block to reposition
-                artie_distance.workspace_adjustments.blocks_to_reposition.push(BlockPositionChange {
-                    block: BlockChange {
-                            id: workspace_block.0.clone(),
-                            name : workspace_block.0.clone(),
-                        },
-                    current_position: vec![workspace_block.1],
-                    target_position: vec![solution_block.1],
-                    }
-                );
+                if distance > 0.0 {
+                    // Adds the workspace block to reposition
+                    artie_distance.workspace_adjustments.blocks_to_reposition.push(BlockPositionChange {
+                        block: BlockChange {
+                                id: workspace_block.0.clone(),
+                                name : workspace_block.0.clone(),
+                            },
+                        current_position: vec![workspace_block.1],
+                        target_position: vec![solution_block.1],
+                        }
+                    );
+                }
 
                 // Remove the element from the solution positions remaining
                 solution_positions_remaining.swap_remove(index);

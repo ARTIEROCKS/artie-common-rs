@@ -28,7 +28,7 @@ pub struct WorkspaceAdjustments {
     pub blocks_to_remove: Vec<BlockChange>,
     pub blocks_to_add: Vec<BlockChange>,
     pub blocks_to_reposition: Vec<BlockPositionChange>,
-    pub blocks_with_input_errors: Vec<InputChange>,
+    pub blocks_with_input_changes: Vec<InputChange>,
 }
 
 impl WorkspaceAdjustments {
@@ -38,7 +38,7 @@ impl WorkspaceAdjustments {
             blocks_to_remove: Vec::new(),
             blocks_to_add: Vec::new(),
             blocks_to_reposition: Vec::new(),
-            blocks_with_input_errors: Vec::new(),
+            blocks_with_input_changes: Vec::new(),
         }
     }
 }

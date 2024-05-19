@@ -58,6 +58,12 @@ pub fn test_artie_distance_blocks_same(){
     let distance = artie_distance(&workspace, &solution);
     assert_eq!(distance.block_distance, 0.0);
 
+    // Checks that there is no block to remove, add, reposition or input changes.
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
+
 }
 
 #[test]
