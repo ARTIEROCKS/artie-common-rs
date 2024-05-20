@@ -10,7 +10,7 @@ license = "Apache-2.0"
 repository = "https://github.com/ARTIEROCKS/artie-common-rs.git"
 homepage = "https://github.com/ARTIEROCKS/artie-common-rs.git"
 documentation = "https://docs.rs/artie-common-rs/latest/artie-common-rs"
-keywords = ["education", "block programming", "ai", "artificial", "intelligence"]
+keywords = ["education", "ai", "artificial", "intelligence"]
 categories = ["data-structures","encoding", "simulation"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
