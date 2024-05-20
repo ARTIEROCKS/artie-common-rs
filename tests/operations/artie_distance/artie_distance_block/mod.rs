@@ -97,6 +97,13 @@ pub fn test_artie_blocks_more_in_workspace(){
 
     let distance = artie_distance(&workspace, &solution);
     assert_eq!(distance.block_distance, 3.0);
+
+    // Checks that there are blocks in the workspace_adjustments
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 1);
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 2);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
+
 }
 
 #[test]
@@ -132,6 +139,12 @@ pub fn test_artie_blocks_more_in_solution(){
 
     let distance = artie_distance(&workspace, &solution);
     assert_eq!(distance.block_distance, 2.0);
+
+    // Checks if there are blocks in the workspace_adjustments
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 1);
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 1);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
 
 }
 

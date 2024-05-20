@@ -1,4 +1,5 @@
 use crate::structure::hint::BlockPositionChange;
+use crate::structure::hint::InputChange;
 use crate::structure::Block;
 use crate::structure::Workspace;
 use crate::structure::hint::WorkspaceAdjustments;
@@ -74,10 +75,10 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
     // Calculate the block distance
     let common_blocks: HashSet<_> = workspace_block_names.intersection(&solution_block_names).cloned().collect();
 
-    // Unique blocks in workspace (to be removed)
+    // Unique blocks in workspace (to be added)
     let unique_workspace_blocks = workspace_block_names.difference(&solution_block_names).cloned().collect::<HashSet<_>>();
 
-    // Unique blocks in solution (to be added)
+    // Unique blocks in solution (to be removed)
     let unique_solution_blocks = solution_block_names.difference(&workspace_block_names).cloned().collect::<HashSet<_>>();
 
     // Set the distances for the ArtieDistance struct
@@ -100,25 +101,25 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
         collect_block_positions(block, &mut position, &mut solution_block_positions);
     }
 
-    // Add unique blocks from the workspace to blocks_to_remove
-    workspace.blocks.iter()
-        .filter(|block| unique_workspace_blocks.contains(&block.name))
-        .for_each(|block| {
-            artie_distance.workspace_adjustments.blocks_to_remove.push(BlockChange {
-                id: block.id.clone(),
-                name: block.name.clone(),
-            });
-        });
-
-    // Add unique blocks from the solution to blocks_to_add
-    solution.blocks.iter()
-        .filter(|block| unique_solution_blocks.contains(&block.name))
-        .for_each(|block| {
+    // Add the blocks that should be added
+    for block in &workspace_block_positions {
+        if unique_workspace_blocks.contains(&block.0) {
             artie_distance.workspace_adjustments.blocks_to_add.push(BlockChange {
-                id: block.id.clone(),
-                name: block.name.clone(),
+                id: block.0.clone(),
+                name: block.0.clone(),
             });
-        });
+        }
+    }
+
+    // Add the blocks that should be removed
+    for block in &solution_block_positions {
+        if unique_solution_blocks.contains(&block.0) {
+            artie_distance.workspace_adjustments.blocks_to_remove.push(BlockChange {
+                id: block.0.clone(),
+                name: block.0.clone(),
+            });
+        }
+    }
 
     // 3.2- Calculate the position distance for unique_blocks
     for block in &workspace_block_positions {
@@ -232,8 +233,25 @@ pub fn calculate_input_distance(workspace_block: &Block, solution_block: &Block,
             if let Some(solution_field) = solution_block.fields.iter().find(|f| f.name == workspace_field.name) {
                 if workspace_field.value != solution_field.value && workspace_field.is_numeric() && solution_field.is_numeric() {
                     artie_distance.input_distance += (workspace_field.value_as_double() - solution_field.value_as_double()).abs();
+                    
+                    // Adds the workspace adjustments for the input changes
+                    artie_distance.workspace_adjustments.blocks_with_input_changes.push(InputChange{
+                        block_id: workspace_block.name.clone(),
+                        input_name: workspace_field.name.clone(),
+                        actual_value: workspace_field.value.clone(),
+                        expected_value: solution_field.value.clone(),
+                    });
+                    
                 } else if workspace_field.value != solution_field.value {
                     artie_distance.input_distance += 1.0;
+
+                    // Adds the workspace adjustments for the input changes
+                    artie_distance.workspace_adjustments.blocks_with_input_changes.push(InputChange{
+                        block_id: workspace_block.name.clone(),
+                        input_name: workspace_field.name.clone(),
+                        actual_value: workspace_field.value.clone(),
+                        expected_value: solution_field.value.clone(),
+                    });
                 }
             }
         }
