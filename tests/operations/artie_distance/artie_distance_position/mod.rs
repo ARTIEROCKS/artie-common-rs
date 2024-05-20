@@ -61,6 +61,13 @@ pub fn test_artie_distance_positions_same(){
 
     let distance = artie_distance(&Workspace::new("workspace_id", "workspace_name", vec![workspace_block_a]), &Workspace::new("solution_id", "solution_name", vec![solution_block_a]));
     assert_eq!(distance.position_distance, 0.0);
+
+    // Checks the workspace adjustments
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
+
 }
 
 #[test]
@@ -80,25 +87,31 @@ pub fn test_artie_distance_positions_more_in_workspace(){
     solution_block_a.nested.push(solution_block_b);
 
 
-     // Creating the workspace
-     let mut workspace_block_a = Block::new("A", "A", "test_family", vec![]);
-     let mut workspace_block_b = Block::new("B", "B", "test_family", vec![]);
-     let mut workspace_block_c = Block::new("C", "C", "test_family", vec![]);
-     let workspace_block_d = Block::new("D", "D", "test_family", vec![]);
-     let workspace_block_e = Block::new("E", "E", "test_family", vec![]);
- 
-     // D is nested in C
-     workspace_block_c.nested.push(workspace_block_d);
-     // C is next to B
-     workspace_block_b.next = Some(Box::new(workspace_block_c));
-     // B is nested in A
-     workspace_block_a.nested.push(workspace_block_b);
-     //E is next to A
-     workspace_block_a.next = Some(Box::new(workspace_block_e));
- 
-     // Asserting that the distance is 7
-     let distance = artie_distance(&Workspace::new("workspace_id", "workspace_name", vec![workspace_block_a]), &Workspace::new("solution_id", "solution_name", vec![solution_block_a]));
-     assert_eq!(distance.position_distance, 7.0);
+    // Creating the workspace
+    let mut workspace_block_a = Block::new("A", "A", "test_family", vec![]);
+    let mut workspace_block_b = Block::new("B", "B", "test_family", vec![]);
+    let mut workspace_block_c = Block::new("C", "C", "test_family", vec![]);
+    let workspace_block_d = Block::new("D", "D", "test_family", vec![]);
+    let workspace_block_e = Block::new("E", "E", "test_family", vec![]);
+
+    // D is nested in C
+    workspace_block_c.nested.push(workspace_block_d);
+    // C is next to B
+    workspace_block_b.next = Some(Box::new(workspace_block_c));
+    // B is nested in A
+    workspace_block_a.nested.push(workspace_block_b);
+    //E is next to A
+    workspace_block_a.next = Some(Box::new(workspace_block_e));
+
+    // Asserting that the distance is 7
+    let distance = artie_distance(&Workspace::new("workspace_id", "workspace_name", vec![workspace_block_a]), &Workspace::new("solution_id", "solution_name", vec![solution_block_a]));
+    assert_eq!(distance.position_distance, 7.0);
+
+    // Checks the workspace adjustments
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 1);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
 
 }
 
@@ -137,6 +150,13 @@ pub fn test_artie_distance_positions_more_in_solution(){
     // Asserting that the distance is 8
     let distance = artie_distance(&Workspace::new("workspace_id", "workspace_name", vec![workspace_block_a]), &Workspace::new("solution_id", "solution_name", vec![solution_block_a]));
     assert_eq!(distance.position_distance, 8.0);
+
+    // Checks the workspace adjustments
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 1);
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 1);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
+
 }
 
 #[test]
@@ -169,4 +189,11 @@ pub fn test_artie_distance_positions_completely_different(){
     // Asserting that the distance is 21
     let distance = artie_distance(&Workspace::new("workspace_id", "workspace_name", vec![workspace_block_d]), &Workspace::new("solution_id", "solution_name", vec![solution_block_a]));
     assert_eq!(distance.position_distance, 21.0);
+
+    // Checks the workspace adjustments
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 3);
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 4);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
+
 }
