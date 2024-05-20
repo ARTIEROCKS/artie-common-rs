@@ -182,4 +182,11 @@ pub fn test_artie_distance_blocks_completely_different(){
     let distance = artie_distance(&workspace, &solution);
     assert_eq!(distance.block_distance, 10.0);
 
+    // Checks the workspace adjustments
+    assert_eq!(distance.workspace_adjustments.blocks_to_remove.len(), 5);
+    assert_eq!(distance.workspace_adjustments.blocks_to_add.len(), 5);
+    assert_eq!(distance.workspace_adjustments.blocks_to_reposition.len(), 0);
+    assert_eq!(distance.workspace_adjustments.blocks_with_input_changes.len(), 0);
+
+
 }
