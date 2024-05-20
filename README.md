@@ -1,4 +1,4 @@
-# My Rust Library for Artie Distance Calculation
+# ARTIE Common Library for Artie Distance Calculation
 
 ## Description
 
@@ -17,4 +17,4 @@ Include the following in your `Cargo.toml` file to use this library:
 
 ```toml
 [dependencies]
-my_rust_library = "0.1.0"
+artie_common = "0.1.0"
