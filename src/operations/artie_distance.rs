@@ -101,20 +101,20 @@ pub fn artie_distance(workspace: &Workspace, solution: &Workspace) -> ArtieDista
         collect_block_positions(block, &mut position, &mut solution_block_positions);
     }
 
-    // Add the blocks that should be added
+    // Add the blocks that should be removed
     for block in &workspace_block_positions {
         if unique_workspace_blocks.contains(&block.0) {
-            artie_distance.workspace_adjustments.blocks_to_add.push(BlockChange {
+            artie_distance.workspace_adjustments.blocks_to_remove.push(BlockChange {
                 id: block.0.clone(),
                 name: block.0.clone(),
             });
         }
     }
 
-    // Add the blocks that should be removed
+    // Add the blocks that should be added
     for block in &solution_block_positions {
         if unique_solution_blocks.contains(&block.0) {
-            artie_distance.workspace_adjustments.blocks_to_remove.push(BlockChange {
+            artie_distance.workspace_adjustments.blocks_to_add.push(BlockChange {
                 id: block.0.clone(),
                 name: block.0.clone(),
             });
