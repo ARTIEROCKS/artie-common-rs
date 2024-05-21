@@ -17,4 +17,4 @@ Include the following in your `Cargo.toml` file to use this library:
 
 ```toml
 [dependencies]
-artie_common = "0.1.0"
+artie_common = "0.2.0"
