@@ -128,7 +128,7 @@ pub fn test_calculate_input_distance_differences_in_all_inputs(){
         */
         let mut solution_block_a = Block::new("test_id", "test_name", "test_family", vec![]);
         let input_a = Input::new("input_a", "input_a_value", vec![Field::new(&"input_a_value".to_string(), &"input_a_value".to_string())]);
-        let input_b = Input::new("input_b", "input_b_value", vec![Field::new(&"input_b_value".to_string(), &"8.45".to_string())]);
+        let input_b = Input::new("input_b", "input_b_value", vec![Field::new(&"input_b_value".to_string(), &"3.3".to_string())]);
         solution_block_a.add_input(input_a);
         solution_block_a.add_input(input_b);
 

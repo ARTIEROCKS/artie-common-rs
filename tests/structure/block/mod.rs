@@ -24,8 +24,8 @@ pub fn test_add_nested() {
 #[test]
 pub fn test_block_eq() {
     let input_1 = Input::new("test", "test", vec![Field::new("field_a", "123.45")]);
-    let input_2 = Input::new("test", "test", vec![Field::new("field_b", "abc")]);
-    let input_3 = Input::new("test", "test", vec![Field::new("field_c", "123.45")]);
+    let input_2 = Input::new("test", "test", vec![Field::new("field_a", "123.45")]);
+    let input_3 = Input::new("test", "test", vec![Field::new("field_b", "abc")]);
 
     let mut block_1 = Block::new("test", "test", "test", vec![input_1]);
     let block_2 = Block::new("test", "test", "test", vec![input_2]);
