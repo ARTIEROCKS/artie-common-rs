@@ -1,11 +1,12 @@
-use crate::structure::field::Field;
+use serde::{Deserialize, Serialize};
+use crate::structure::input::Input;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Block {
     pub id: String,
     pub name: String,
     pub family: String,
-    pub fields: Vec<Field>,
+    pub inputs: Vec<Input>,
     pub next: Option<Box<Block>>,
     pub previous: Option<Box<Block>>,
     pub parent: Option<Box<Block>>,
@@ -13,12 +14,12 @@ pub struct Block {
 }
 
 impl Block {
-    pub fn new(id: &str, name: &str, family: &str, fields: Vec<Field>) -> Self {
+    pub fn new(id: &str, name: &str, family: &str, inputs: Vec<Input>) -> Self {
         Self {
             id: id.to_string(),
             name: name.to_string(),
             family: family.to_string(),
-            fields,
+            inputs,
             next: None,
             previous: None,
             parent: None,
@@ -26,15 +27,11 @@ impl Block {
         }
     }
 
-    pub fn add_field(&mut self, field: Field) {
-        self.fields.push(field);
+    pub fn add_input(&mut self, input: Input) {
+        self.inputs.push(input);
     }
 
     pub fn add_nested(&mut self, block: Block) {
         self.nested.push(block);
-    }
-
-    pub fn is_numeric(&self) -> bool {
-        self.fields.iter().all(|field| field.is_numeric())
     }
 }

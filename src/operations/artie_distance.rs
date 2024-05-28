@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 use crate::structure::hint::BlockPositionChange;
 use crate::structure::hint::InputChange;
 use crate::structure::Block;
@@ -12,6 +14,7 @@ const BLOCK_DISTANCE_COEFFICIENT: f64 = 2.0;
 const POSITION_DISTANCE_COEFFICIENT: f64 = 4.0;
 const INPUT_DISTANCE_COEFFICIENT: f64 = 8.0;
 
+#[derive(Serialize, Deserialize)]
 pub struct ArtieDistance {
     pub family_distance: f64,
     pub block_distance: f64,
@@ -229,30 +232,36 @@ pub fn collect_block_positions(block: &Block, position: &mut usize, block_positi
 pub fn calculate_input_distance(workspace_block: &Block, solution_block: &Block, artie_distance: &mut ArtieDistance) {
 
     if workspace_block.name == solution_block.name {
-        for workspace_field in &workspace_block.fields {
-            if let Some(solution_field) = solution_block.fields.iter().find(|f| f.name == workspace_field.name) {
-                if workspace_field.value != solution_field.value && workspace_field.is_numeric() && solution_field.is_numeric() {
-                    artie_distance.input_distance += (workspace_field.value_as_double() - solution_field.value_as_double()).abs();
-                    
-                    // Adds the workspace adjustments for the input changes
-                    artie_distance.workspace_adjustments.blocks_with_input_changes.push(InputChange{
-                        block_id: workspace_block.name.clone(),
-                        input_name: workspace_field.name.clone(),
-                        actual_value: workspace_field.value.clone(),
-                        expected_value: solution_field.value.clone(),
-                    });
-                    
-                } else if workspace_field.value != solution_field.value {
-                    artie_distance.input_distance += 1.0;
+        for workspace_input in &workspace_block.inputs {
+            if let Some(solution_input) = solution_block.inputs.iter().find(|f| f.name == workspace_input.name) {
+                for (i, workspace_field) in workspace_input.fields.iter().enumerate() {
 
-                    // Adds the workspace adjustments for the input changes
-                    artie_distance.workspace_adjustments.blocks_with_input_changes.push(InputChange{
-                        block_id: workspace_block.name.clone(),
-                        input_name: workspace_field.name.clone(),
-                        actual_value: workspace_field.value.clone(),
-                        expected_value: solution_field.value.clone(),
-                    });
+                    // Gets the solution field given the index
+                    let solution_field = &solution_input.fields[i];
+                    if workspace_field.value != solution_field.value && workspace_field.is_numeric() && solution_field.is_numeric() {
+                        artie_distance.input_distance += (workspace_field.value_as_double() - solution_field.value_as_double()).abs();
+                        
+                        // Adds the workspace adjustments for the input changes
+                        artie_distance.workspace_adjustments.blocks_with_input_changes.push(InputChange{
+                            block_id: workspace_block.name.clone(),
+                            input_name: workspace_input.name.clone(),
+                            actual_value: workspace_field.value.clone(),
+                            expected_value: solution_field.value.clone(),
+                        });
+                        
+                    } else if workspace_field.value != solution_field.value {
+                        artie_distance.input_distance += 1.0;
+
+                        // Adds the workspace adjustments for the input changes
+                        artie_distance.workspace_adjustments.blocks_with_input_changes.push(InputChange{
+                            block_id: workspace_block.name.clone(),
+                            input_name: workspace_input.name.clone(),
+                            actual_value: workspace_field.value.clone(),
+                            expected_value: solution_field.value.clone(),
+                        });
+                    }
                 }
+
             }
         }
     }

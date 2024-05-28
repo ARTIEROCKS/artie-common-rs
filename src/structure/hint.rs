@@ -1,12 +1,14 @@
+use serde::{Deserialize, Serialize};
+
 // Structure to represent a block that needs to be added or removed, with the necessary information.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BlockChange {
     pub id: String,
     pub name: String,
 }
 
 // Structure to represent a position change of a block.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BlockPositionChange {
     pub block: BlockChange,
     pub current_position: Vec<usize>, // Current position in the student's workspace.
@@ -14,7 +16,7 @@ pub struct BlockPositionChange {
 }
 
 // Structure to represent an incorrect input in a block.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InputChange {
     pub block_id: String,       // ID of the block containing the incorrect input.
     pub input_name: String,     // Name of the input.
@@ -23,7 +25,7 @@ pub struct InputChange {
 }
 
 // Main structure to store all necessary adjustments.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct WorkspaceAdjustments {
     pub blocks_to_remove: Vec<BlockChange>,
     pub blocks_to_add: Vec<BlockChange>,
