@@ -1,6 +1,7 @@
+use serde::{Deserialize, Serialize};
 use crate::structure::input::Input;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Block {
     pub id: String,
     pub name: String,

@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 use crate::structure::hint::BlockPositionChange;
 use crate::structure::hint::InputChange;
 use crate::structure::Block;
@@ -12,6 +14,7 @@ const BLOCK_DISTANCE_COEFFICIENT: f64 = 2.0;
 const POSITION_DISTANCE_COEFFICIENT: f64 = 4.0;
 const INPUT_DISTANCE_COEFFICIENT: f64 = 8.0;
 
+#[derive(Serialize, Deserialize)]
 pub struct ArtieDistance {
     pub family_distance: f64,
     pub block_distance: f64,

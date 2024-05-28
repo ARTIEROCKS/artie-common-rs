@@ -1,6 +1,7 @@
+use serde::{Deserialize, Serialize};
 use crate::structure::block::Block;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Workspace {
     pub id: String,
     pub name: String,
