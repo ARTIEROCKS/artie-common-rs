@@ -1,4 +1,6 @@
-#[derive(Debug, PartialEq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Field {
     pub name: String,
     pub value: String,

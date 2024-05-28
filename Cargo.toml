@@ -2,7 +2,7 @@
 name = "artie_common"
 description = "Common Library for Artie Rust Projects"
 authors = ["Luis Eduardo Imbernón <imbernon@gmail.com>"]
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.60"
 readme = "README.md"
@@ -20,3 +20,5 @@ rand = "0.8.5"
 num_cpus = "1.15.0"
 log = { version = "0.4", features = ["std", "serde", "kv_unstable"] }
 env_logger = "0.11.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0.68"
