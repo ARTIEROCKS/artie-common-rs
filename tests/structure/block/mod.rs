@@ -1,6 +1,35 @@
+use serde_json;
+
 use artie_common::structure::Block;
 use artie_common::structure::Field;
 use artie_common::structure::Input;
+
+#[test]
+pub fn test_serialization(){
+    let input_1 = Input::new("test", "test", vec![Field::new("field_a", "123.45")]);
+    let input_2 = Input::new("test", "test", vec![Field::new("field_b", "abc")]);
+    let mut block = Block::new("test", "test", "test", vec![input_1]);
+    block.add_input(input_2);
+
+    let serialized = serde_json::to_string(&block).unwrap();
+    let deserialized: Block = serde_json::from_str(&serialized).unwrap();
+
+    assert_eq!(block, deserialized);
+
+}
+
+#[test]
+pub fn test_deserialization(){
+    let input_1 = Input::new("test", "test", vec![Field::new("field_a", "123.45")]);
+    let input_2 = Input::new("test", "test", vec![Field::new("field_b", "abc")]);
+    let mut block = Block::new("test", "test", "test", vec![input_1]);
+    block.add_input(input_2);
+
+    let serialized = serde_json::to_string(&block).unwrap();
+    let deserialized: Block = serde_json::from_str(&serialized).unwrap();
+
+    assert_eq!(block, deserialized);
+}
 
 #[test]
 pub fn test_add_input() {
