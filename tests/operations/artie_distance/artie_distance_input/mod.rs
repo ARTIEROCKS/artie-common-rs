@@ -3,7 +3,7 @@ use artie_common::structure::Field;
 use artie_common::structure::Input;
 use artie_common::structure::Workspace;
 use std::vec;
-use artie_common::operations::artie_distance::ArtieDistance;
+use artie_common::structure::ArtieDistance;
 use artie_common::operations::artie_distance::calculate_input_distance;
 
 
