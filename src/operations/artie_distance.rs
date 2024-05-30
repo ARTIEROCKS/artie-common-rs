@@ -1,11 +1,9 @@
-use serde::{Deserialize, Serialize};
-
-use crate::structure::hint::BlockPositionChange;
-use crate::structure::hint::InputChange;
 use crate::structure::Block;
 use crate::structure::Workspace;
-use crate::structure::hint::WorkspaceAdjustments;
+use crate::structure::ArtieDistance;
 use crate::structure::hint::BlockChange;
+use crate::structure::hint::BlockPositionChange;
+use crate::structure::hint::InputChange;
 use std::collections::HashSet;
 
 // Coefficients for weighting each distance type
@@ -13,28 +11,6 @@ const FAMILY_DISTANCE_COEFFICIENT: f64 = 1.0;
 const BLOCK_DISTANCE_COEFFICIENT: f64 = 2.0;
 const POSITION_DISTANCE_COEFFICIENT: f64 = 4.0;
 const INPUT_DISTANCE_COEFFICIENT: f64 = 8.0;
-
-#[derive(Serialize, Deserialize)]
-pub struct ArtieDistance {
-    pub family_distance: f64,
-    pub block_distance: f64,
-    pub position_distance: f64,
-    pub input_distance: f64,
-    pub total_distance: f64,
-    pub workspace_adjustments: WorkspaceAdjustments,
-}
-impl ArtieDistance {
-    pub fn new() -> ArtieDistance {
-        ArtieDistance {
-            family_distance: 0.0,
-            block_distance: 0.0,
-            position_distance: 0.0,
-            input_distance: 0.0,
-            total_distance: 0.0,
-            workspace_adjustments: WorkspaceAdjustments::new(),
-        }
-    }
-}
 
 /*
     * Artie Distance

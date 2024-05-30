@@ -1,4 +1,4 @@
-use artie_common::operations::artie_distance::ArtieDistance;
+use artie_common::structure::ArtieDistance;
 use artie_common::operations::artie_distance::calculate_total_distance;
 
 #[test]
